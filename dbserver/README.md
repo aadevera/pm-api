@@ -1,6 +1,6 @@
-#DB Server/ Backend
+# DB Server/ Backend
 
-###Setting up:
+### Setting up:
 1. `npm install` 
-..* handle errors using `sudo`
+   * handle errors using `sudo`
 2. `npm start`
