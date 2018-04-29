@@ -8,12 +8,12 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const DBURI = 'mongodb://localhost/Server';
-// mongoose connect
-mongoose.connect(DBURI, {
-    useMongoClient: true
-  } , () => {
-  console.log('Database Connected ...');
-});
+// mongoose connect with promises instead of callback
+mongoose.connect(DBURI, { useMongoClient: true})
+  .then(
+    () => { console.log ("DB Connected at "+ DBURI + " ...");},
+    err => { console.log ("Error connecting to DB at "+ DBURI + " ...") }
+  );
 
 // for CORS
 app.use(function(req, res, next) {
@@ -34,21 +34,17 @@ require('./models/index');
 
 // Setup Routes
 const UserRouter = require('./routes/user-router');
-app.use('/user', UserRouter);
-
 const ClassRouter = require('./routes/class-router');
-app.use('/class', ClassRouter);
-
 const PostRouter = require('./routes/post-router');
-app.use('/post', PostRouter);
-
 const CommentRouter = require('./routes/comment-router');
-app.use('/comment', CommentRouter);
-
 const MessageRouter = require('./routes/message-router');
-app.use('/message', MessageRouter);
-
 const ConversationRouter = require('./routes/conversation-router');
+
+app.use('/user', UserRouter);
+app.use('/class', ClassRouter);
+app.use('/post', PostRouter);
+app.use('/comment', CommentRouter);
+app.use('/message', MessageRouter);
 app.use('/conversation', ConversationRouter);
 
 // Homepage message
