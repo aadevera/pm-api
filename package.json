@@ -1,0 +1,21 @@
+{
+  "name": "pm-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon -w . ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "mongoose": "*",
+    "morgan": "~1.9.0",
+    "npm": "^6.0.0",
+    "request": "*"
+  },
+  "devDependencies": {
+    "nodemon": "*"
+  }
+}
