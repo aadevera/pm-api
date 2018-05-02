@@ -1,6 +1,7 @@
 # pm-api
-## Setting up
+## Setting Up
 1. `npm install` 
-2. `npm start`
+2. If MongoDB is not yet started: `mongod`
+3. `npm start`
 > Goodluck.
 
