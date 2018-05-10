@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+
 // var logger = require('morgan');
 
 // setup mongoose connection
@@ -16,15 +18,29 @@ mongoose.connect(DBURI, { dbName: DBNAME } )
     );
 
 require('./lib/models/index');
+
 const Routers = require('./lib/routes/index');
 const app = express();
 //app.use(logger('dev'));
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser('THIS IS A SECRET'));
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// CORS
+app.use(function(req, res, next) {
+// the value of this header can't be a wildcard when header credentials are included
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Authorization, Access-Control-Request-Method, Access-Control-Request-Headers');
+
+    res.setHeader('Cache-Control', 'no-cache');
+    next();
+});
 
 app.use('/', Routers.IndexRouter);
 app.use('/class', Routers.ClassRouter);
@@ -33,7 +49,16 @@ app.use('/conversation', Routers.ConversationRouter);
 app.use('/message', Routers.MessageRouter);
 app.use('/post', Routers.PostRouter);
 app.use('/user', Routers.UserRouter);
-app.use("*", (req, res) => {
-    res.status(404).send('Error 404. Page not Found');
-});
+
+// passport
+const localSignUp = require('./passport/local-signup')
+const localLogIn = require('./passport/local-login')
+passport.use('local-signup', localSignUp)
+passport.use('local-login', localLogIn)
+// login routes
+const authController = require('./passport/authController');
+app.post('/signup', authController.signup)
+
+app.post('/login', authController.login)
+
 module.exports = app;
