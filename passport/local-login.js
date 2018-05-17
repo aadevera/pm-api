@@ -10,6 +10,8 @@ module.exports = new PassportLocalStrategy({usernameField:'email', passReqToCall
         email: email.trim(),
         password
     }
+    // if (email === "") return next('Required to enter Email')
+    // if (password === "") return next ('Required to enter Password') 
 
     return User.findOne({ email }, (err, user) => {
         if (err) return next(err)
@@ -19,14 +21,13 @@ module.exports = new PassportLocalStrategy({usernameField:'email', passReqToCall
         if (user.password !== password) return next('Invalid Credentials', null, null)
         //create token
         const tokenPayload = {
-            _id: user._id
+            _id: user._id,
+            usertype: user.usertype,
+            name: user.name
         }
 
-        const data = {
-            name: user.name,
-            usertype: user.usertype
-        }
-        const token = jwt.sign(tokenPayload, 'THIS IS A SECRET')
+        const data = user
+        const token = jwt.sign(tokenPayload, 'secretcode')
         return next(null, token, data)
     })
 });

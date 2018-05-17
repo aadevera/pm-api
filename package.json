@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon -w . ./bin/www"
+    "start": "nodemon --watch . ./bin/www"
   },
   "dependencies": {
     "body-parser": "*",
@@ -15,7 +15,9 @@
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "request": "*"
+    "randomstring": "^1.1.5",
+    "request": "*",
+    "universal-cookie": "^2.1.2"
   },
   "devDependencies": {
     "nodemon": "*"

@@ -58,7 +58,10 @@ passport.use('local-login', localLogIn)
 // login routes
 const authController = require('./passport/authController');
 app.post('/signup', authController.signup)
-
 app.post('/login', authController.login)
+
+const authCheck = require('./passport/authCheck')
+app.use('/getdata', authCheck);
+app.get('/getdata', authController.getData)
 
 module.exports = app;
